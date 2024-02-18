@@ -1,21 +1,30 @@
 package com.cmpt276.asn2.models;
 
-public class Users {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="students")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int uid; 
     private String name; 
     private int weight; 
     private int height; 
     private String hairColour; 
-    private int gpa;
+    private double gpa;
+    private String favColour; 
     
-    public Users() {
+    public Student() {
     }
 
-    public Users(String name, int weight, int height, String hairColour, int gpa) {
+    public Student(String name, int weight, int height, String hairColour, double gpa, String favColour) {
         this.name = name;
         this.weight = weight;
         this.height = height;
         this.hairColour = hairColour;
         this.gpa = gpa;
+        this.favColour = favColour;
     }
 
     public String getName() {
@@ -46,11 +55,25 @@ public class Users {
         this.hairColour = hairColour;
     }
     
-    public int getGpa() {
+    public double getGpa() {
         return gpa;
     }
-    public void setGpa(int gpa) {
+    public void setGpa(double gpa) {
         this.gpa = gpa;
     } 
+
+    public String getFavColour() {
+        return favColour;
+    }
+    public void setFavColour(String favColour) {
+        this.favColour = favColour;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
     
 }
