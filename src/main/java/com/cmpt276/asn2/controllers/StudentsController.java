@@ -15,6 +15,8 @@ import com.cmpt276.asn2.models.Student;
 import com.cmpt276.asn2.models.StudentRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class StudentsController {
@@ -58,18 +60,56 @@ public class StudentsController {
             //delete the student 
             studentRepo.delete(toDeleteSt.get());
             response.setStatus(200);
+            return "students/addedStudent";
 
         } else {
             //show error 
             response.setStatus(404);
+            return "students/failedRequest.html";
         }
-        return "students/addedStudent";
     }
 
     //postmapping for updating student 
-    //ask for the student's uid 
-    //if the uid exists: 
-        //take in all values again for the new student attributes
-    //if it doesnt exist, show error
-    
+    @PostMapping("/students/update")
+    public String updateStudent(@RequestParam Map<String, String> updatedStudent, HttpServletResponse response) {
+        System.out.println("UPDATE student");
+
+        //get for the student's uid 
+        int getUid = Integer.parseInt(updatedStudent.get("uid"));
+        Optional<Student> toUpdateSt = studentRepo.findById(getUid);
+            
+        //if the uid exists: 
+        if(toUpdateSt.isPresent()){
+            //take in all values again for the new student attributes
+            Student changedSt = toUpdateSt.get();
+
+            String updateName = updatedStudent.get("name");
+            changedSt.setName(updateName);
+
+            int updateWeight = Integer.parseInt(updatedStudent.get("weight"));
+            changedSt.setWeight(updateWeight);
+
+            int updateHeight = Integer.parseInt(updatedStudent.get("height"));
+            changedSt.setHeight(updateHeight);
+
+            String updateHair = updatedStudent.get("hairColour");
+            changedSt.setHairColour(updateHair);
+
+            double updateGpa = Double.parseDouble(updatedStudent.get("gpa"));
+            changedSt.setGpa(updateGpa);
+
+            String updateFavCol = updatedStudent.get("favColour");
+            changedSt.setFavColour(updateFavCol);
+
+            //save updated student
+            studentRepo.save(changedSt);
+            response.setStatus(200);
+            return "students/addedStudent";
+
+        } else {
+            //show error 
+            response.setStatus(404);
+            return "students/failedRequest.html";
+        }
+    }
 }
