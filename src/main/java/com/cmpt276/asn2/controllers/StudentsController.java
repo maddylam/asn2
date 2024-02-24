@@ -1,5 +1,6 @@
 package com.cmpt276.asn2.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,8 +16,6 @@ import com.cmpt276.asn2.models.Student;
 import com.cmpt276.asn2.models.StudentRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.web.bind.annotation.RequestBody;
-
 
 @Controller
 public class StudentsController {
@@ -33,6 +32,11 @@ public class StudentsController {
         return "students/showAll";
     }
 
+    private boolean isValidColour(String colour) {
+        List<String> validColours = Arrays.asList("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "grey");
+        return validColours.contains(colour.toLowerCase()); 
+    }
+    
     @PostMapping("/students/add")
     public String addStudent(@RequestParam Map<String, String> newStudent, HttpServletResponse response){
         System.out.println("ADD student");
@@ -40,8 +44,14 @@ public class StudentsController {
         int newWeight = Integer.parseInt(newStudent.get("weight"));
         int newHeight = Integer.parseInt(newStudent.get("height"));
         String newHairColour = newStudent.get("hairColour");
+        if(!isValidColour(newHairColour)){
+            newHairColour = "black"; 
+        }
         double newGpa = Double.parseDouble(newStudent.get("gpa"));
         String newFavColour = newStudent.get("favColour");
+        if(!isValidColour(newFavColour)){
+            newFavColour = "black"; 
+        }
         studentRepo.save(new Student(newName, newWeight, newHeight, newHairColour, newGpa, newFavColour)); 
         response.setStatus(201);
 
@@ -99,6 +109,9 @@ public class StudentsController {
             changedSt.setGpa(updateGpa);
 
             String updateFavCol = updatedStudent.get("favColour");
+            if(!isValidColour(updateFavCol)){
+                updateFavCol = "black"; 
+            }
             changedSt.setFavColour(updateFavCol);
 
             //save updated student
@@ -112,5 +125,5 @@ public class StudentsController {
             return "students/failedRequest.html";
         }
     }
-
+    
 }

@@ -44,10 +44,15 @@
             border-radius: 10px;
             padding: 10px;
             margin-bottom: 10px;
+            margin-top: 10px;
         }
 
         .high-gpa {
             color: rgb(0, 217, 152);
+        }
+
+        .med-gpa {
+            color: rgb(255, 230, 0);
         }
 
         .low-gpa {
@@ -55,7 +60,7 @@
         }
 
         .container-fluid{
-            margin: 15px; 
+            margin: 15px;
         }
     </style>
 </head>
@@ -65,7 +70,8 @@
     <section class="nav-bar">
         <a class="active" href="/students/view">Display Students</a>
         <a href="/add.html">Add Student</a>
-        <a href="/update.html">Update Student</a>
+        <a href="/update.html">Update Student</a>  
+        <!-- <a href="/students/updated">Update Student</a> -->
         <a href="/delete.html">Delete Student</a>
     </section>
 
@@ -77,11 +83,11 @@
                 <div th:each="student:${st}" class="student-rectangle" 
                     th:style="'border: 5px solid ' + ${student.favColour} + '; width: ' + ${student.weight} + 'px; height: ' + ${student.height} + 'px;'">
 
-                    <span th:text="${student.name}"></span> <br>
+                    <span th:text="${student.name}"  th:style="'color:' + ${student.hairColour}"></span> <br>
                     <p>
                         uid: <span th:text="${student.uid}"></span>
                     </p>
-                    <span th:text="${student.gpa}" th:class="${student.gpa >= 3.0 ? 'high-gpa' : 'low-gpa'}"></span> <br>
+                    <span th:text="${student.gpa}" th:class="${student.gpa >= 3.0 ? 'high-gpa' : (student.gpa >= 2.0 ? 'med-gpa' : 'low-gpa')}"></span> <br>
                     
                 </div>
             </div>
