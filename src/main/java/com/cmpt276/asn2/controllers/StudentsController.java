@@ -33,6 +33,7 @@ public class StudentsController {
     }
 
     private boolean isValidColour(String colour) {
+        //if true, it will set the colour to black since certain strings can't be interpreted by thymeleaf 
         List<String> validColours = Arrays.asList("red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "grey");
         return validColours.contains(colour.toLowerCase()); 
     }
@@ -40,6 +41,8 @@ public class StudentsController {
     @PostMapping("/students/add")
     public String addStudent(@RequestParam Map<String, String> newStudent, HttpServletResponse response){
         System.out.println("ADD student");
+
+        //get all attributes of student 
         String newName = newStudent.get("name");
         int newWeight = Integer.parseInt(newStudent.get("weight"));
         int newHeight = Integer.parseInt(newStudent.get("height"));
@@ -93,21 +96,20 @@ public class StudentsController {
             //take in all values again for the new student attributes
             Student changedSt = toUpdateSt.get();
 
+            //get and set all updated values 
             String updateName = updatedStudent.get("name");
             changedSt.setName(updateName);
-
             int updateWeight = Integer.parseInt(updatedStudent.get("weight"));
             changedSt.setWeight(updateWeight);
-
             int updateHeight = Integer.parseInt(updatedStudent.get("height"));
             changedSt.setHeight(updateHeight);
-
             String updateHair = updatedStudent.get("hairColour");
+            if(!isValidColour(updateHair)){
+                updateHair = "black"; 
+            }
             changedSt.setHairColour(updateHair);
-
             double updateGpa = Double.parseDouble(updatedStudent.get("gpa"));
             changedSt.setGpa(updateGpa);
-
             String updateFavCol = updatedStudent.get("favColour");
             if(!isValidColour(updateFavCol)){
                 updateFavCol = "black"; 
